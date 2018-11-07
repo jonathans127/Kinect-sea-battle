@@ -25,6 +25,7 @@ namespace GridSandbox
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        
         //BEGIN: for EK131 Students -- feel free to change these variables
         const int numGridRows = 7, numGridCols = 7;
         //END: for EK131
@@ -151,12 +152,14 @@ namespace GridSandbox
         /////////////////////
         // Variables to use//
         /////////////////////
+        int steps;
         int delayFrames;
         int[,] gridArray;
         Rectangle[,] rectArray;
         bool isGameOver, waitingOnBot;
         bool isPlayerOneHandClosed, hasPlayerOneHandOpened;
-
+        
+        
         ////////////////
         //DO NOT TOUCH//
         ////////////////
@@ -270,12 +273,14 @@ namespace GridSandbox
             }
 
             //student storage initialization
-            gridArray = new int[numGridRows, numGridCols];
+            gridArray = new int[numGridRows, numGridCols];           
             zeroGridArray();
+
 
             WaterGotHit = System.Windows.Media.Brushes.Gray;
             ShipGotHit = System.Windows.Media.Brushes.Red;
             ShipDead = System.Windows.Media.Brushes.Black;
+          
 
             isPlayerOneHandClosed = false; hasPlayerOneHandOpened = false;
 
@@ -689,6 +694,8 @@ namespace GridSandbox
         // reset all grid square colors to white
         void clearBoard()
         {
+            steps = 0;
+            int[,] gridArray = { { 1, 1, 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 1, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 1, 0 }, { 0, 0, 0, 0, 0, 1, 0 } };
             for (int rr = 0; rr < numGridRows; rr++)
             {
                 for (int cc = 0; cc < numGridCols; cc++)
@@ -764,13 +771,14 @@ namespace GridSandbox
         // this function is called upon for grid initialization
         void zeroGridArray()
         {
-            for (int rr = 0; rr < numGridRows; rr++)
+            for (int rr = 0; rr < numGridRows-5; rr++)
             {
-                for (int cc = 0; cc < numGridCols; cc++)
+                for (int cc = 0; cc < numGridCols-5; cc++)
                 {
-                    gridArray[rr, cc] = 0;
+                   gridArray[rr, cc] = 1;
                 }
             }
+            
         }
 
         // sets a player’s color to a given brush color (accepted player numbers are 1 and 2).
@@ -842,48 +850,19 @@ namespace GridSandbox
             //assuming gridArray is 3 x 3
 
             //check diagonals
-            if (gridArray[0, 0] != 0 && gridArray[0, 0] == gridArray[1, 1] && gridArray[1, 1] == gridArray[2, 2])
+            if (gridArray[0, 0] <= 0 && gridArray[0, 1] <=0 && gridArray[0, 2]<=0 && gridArray[0, 3] <=0 && gridArray[0, 4]<=0&&gridArray[0, 5] <= 0 && gridArray[0, 6] <= 0 &&
+                gridArray[1, 0] <= 0 && gridArray[1, 1] <= 0 && gridArray[1, 2] <= 0 && gridArray[1, 3] <= 0 && gridArray[1, 4] <= 0 && gridArray[1, 5] <= 0 && gridArray[1, 6] <= 0 &&
+                gridArray[2, 0] <= 0 && gridArray[2, 1] <= 0 && gridArray[2, 2] <= 0 && gridArray[2, 3] <= 0 && gridArray[2, 4] <= 0 && gridArray[2, 5] <= 0 && gridArray[2, 6] <= 0 &&
+                gridArray[3, 0] <= 0 && gridArray[3, 1] <= 0 && gridArray[3, 2] <= 0 && gridArray[3, 3] <= 0 && gridArray[3, 4] <= 0 && gridArray[3, 5] <= 0 && gridArray[3, 6] <= 0 &&
+                gridArray[4, 0] <= 0 && gridArray[4, 1] <= 0 && gridArray[4, 2] <= 0 && gridArray[4, 3] <= 0 && gridArray[4, 4] <= 0 && gridArray[4, 5] <= 0 && gridArray[4, 6] <= 0 &&
+                gridArray[5, 0] <= 0 && gridArray[5, 1] <= 0 && gridArray[5, 2] <= 0 && gridArray[5, 3] <= 0 && gridArray[5, 4] <= 0 && gridArray[5, 5] <= 0 && gridArray[5, 6] <= 0 &&
+                gridArray[6, 0] <= 0 && gridArray[6, 1] <= 0 && gridArray[6, 2] <= 0 && gridArray[6, 3] <= 0 && gridArray[6, 4] <= 0 && gridArray[6, 5] <= 0 && gridArray[6, 6] <= 0 
+                )
             {
-                return gridArray[0, 0];
+                return 1;
             }
 
-            if (gridArray[2, 0] != 0 && gridArray[2, 0] == gridArray[1, 1] && gridArray[1, 1] == gridArray[0, 2])
-            {
-                return gridArray[2, 0];
-            }
 
-            //check rows
-            if (gridArray[0, 0] != 0 && gridArray[0, 0] == gridArray[0, 1] && gridArray[0, 1] == gridArray[0, 2])
-            {
-                return gridArray[0, 0];
-            }
-
-            if (gridArray[1, 0] != 0 && gridArray[1, 0] == gridArray[1, 1] && gridArray[1, 1] == gridArray[1, 2])
-            {
-                return gridArray[1, 0];
-            }
-
-            if (gridArray[2, 0] != 0 && gridArray[2, 0] == gridArray[2, 1] && gridArray[2, 1] == gridArray[2, 2])
-            {
-                return gridArray[2, 0];
-            }
-
-            // check columns
-            // check rows
-            if (gridArray[0, 0] != 0 && gridArray[0, 0] == gridArray[1, 0] && gridArray[1, 0] == gridArray[2, 0])
-            {
-                return gridArray[0, 0];
-            }
-
-            if (gridArray[0, 1] != 0 && gridArray[0, 1] == gridArray[1, 1] && gridArray[1, 1] == gridArray[2, 1])
-            {
-                return gridArray[0, 1];
-            }
-
-            if (gridArray[0, 2] != 0 && gridArray[0, 2] == gridArray[1, 2] && gridArray[1, 2] == gridArray[2, 2])
-            {
-                return gridArray[0, 2];
-            }
 
             return 0;
         }
@@ -897,6 +876,7 @@ namespace GridSandbox
             isGameOver = false;
             clearBoard();
             zeroGridArray();
+           
         }
 
         // our simple computer AI plays by filling in squares from top to bottom
@@ -924,8 +904,8 @@ namespace GridSandbox
         // Student generated code should be in this location. Currently, the game is tic tac toe.
         void studentWork()
         {
-           
-            int[,] gridArray = { { 1, 1, 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 1, 1, 0 }, { 0, 0, 0, 0, 0, 0, 0 }, { 2, 2, 2, 0, 0, 0, 0 }, { 2, 2, 2, 0, 0, 0, 0 }, { 2, 2, 2, 0, 0, 0, 0 }, { 2, 2, 2, 0, 0, 0, 0 } };
+            
+            Console.WriteLine(gridArray[0,0]);
             // Reminder: Boolean Value is either true or false, "playerMoved" will be used later on in the code
             bool playerMoved = false;
 
@@ -934,7 +914,7 @@ namespace GridSandbox
 
             // set instruction text -- naive set text, gets set EVERY function call
             // Newline => \r\n (Windows Format)
-            setInstructionText("This is an example of a list! \r\n 1. Connect 3 in a row \r\n 2. Beat the Bot \r\n 3. Game repeats!" + 
+            setInstructionText("steps:"+steps+"  This is an example of a list! \r\n 1. Connect 3 in a row \r\n 2. Beat the Bot \r\n 3. Game repeats!" + 
             "\r\n 4. \r\n 5. \r\n 6. \r\n 7. \r\n 8. \r\n" , System.Windows.Media.Brushes.Black, 48);
             
             // set button text
@@ -976,7 +956,7 @@ namespace GridSandbox
                     return;
 
                 // checkWinner() returns 1 or 2 if there is a winner or 0 if there is no winner. 
-                if (checkWinner() == 2) //Winner is player 2
+                if (checkWinner() == 2&&false) //Winner is player 2
                 { 
                     setText("BOT Wins! (Close Hand to Reset)", System.Windows.Media.Brushes.Red); //Changes the text on the screen
                     isGameOver = true; // Changes this global variable so that the game ends
@@ -1023,14 +1003,17 @@ namespace GridSandbox
 
             if (playerMoved && !waitingOnBot) 
             {
-                // process PlayerOne move  
+                // process PlayerOne move
+                
                 if (gridArray[rowHit, colHit] == 0)
                     {
+                    steps += 1;
                     gridArray[rowHit, colHit] = -3;
                     highlightGridLocation(rowHit, colHit, -3);
                     }
                 if (gridArray[rowHit, colHit] == 1)
                 {
+                    steps += 1;
                     gridArray[rowHit, colHit] = -1;
                     highlightGridLocation(rowHit, colHit, -1);
                 }
